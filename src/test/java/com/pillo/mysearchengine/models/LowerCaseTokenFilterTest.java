@@ -26,14 +26,15 @@ public class LowerCaseTokenFilterTest {
     }
 
     @Test
-    public void test_filter_two_identical_tokens_should_return_one_lowercase() throws Exception {
+    public void test_filter_two_identical_tokens_should_return_two_lowercase() throws Exception {
         final List<Token> originalTokens = new ArrayList<>();
         originalTokens.addAll(Arrays.asList(new Token("ToKen"), new Token("ToKen")));
 
         final List<Token> resultTokens = lowerCaseTokenFilter.filter(originalTokens).stream().collect(Collectors.toList());
 
-        assertEquals(1, resultTokens.size());
+        assertEquals(2, resultTokens.size());
         assertEquals("token", resultTokens.get(0).getValue());
+        assertEquals("token", resultTokens.get(1).getValue());
     }
 
     @Test
@@ -70,7 +71,7 @@ public class LowerCaseTokenFilterTest {
         assertEquals(3, resultTokens.size());
         assertEquals("12b3", resultTokens.get(0).getValue());
         assertEquals("token!", resultTokens.get(1).getValue());
-        assertEquals("@a", resultTokens.get(1).getValue());
+        assertEquals("@a", resultTokens.get(2).getValue());
     }
 
 }

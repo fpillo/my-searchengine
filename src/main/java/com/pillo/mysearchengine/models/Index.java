@@ -1,5 +1,6 @@
 package com.pillo.mysearchengine.models;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -34,7 +35,7 @@ public class Index {
     private void index(final Token token, final Document document) {
         Set<Document> documents = invertedMap.get(token);
         if (documents == null) {
-            documents = new TreeSet<>();
+            documents = new HashSet<>();
         }
 
         documents.add(document);
