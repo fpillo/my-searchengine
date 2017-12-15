@@ -1,9 +1,9 @@
 package com.pillo.mysearchengine.models;
 
-import java.util.Set;
+import java.util.List;
 
 public interface Analyzer {
 
-    Set<Token> analyze(Document document);
+    List<Token> analyze(String text);
 
 }

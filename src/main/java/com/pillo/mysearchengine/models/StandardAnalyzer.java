@@ -2,8 +2,8 @@ package com.pillo.mysearchengine.models;
 
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 public class StandardAnalyzer implements Analyzer {
@@ -13,7 +13,25 @@ public class StandardAnalyzer implements Analyzer {
     private final List<TokenFilter> tokenFilters;
 
     @Override
-    public Set<Token> analyze(final Document document) {
-        return null;
+    public List<Token> analyze(final String text) {
+        List<Token> tokens = tokenize(text);
+        tokens = filter(tokens);
+
+        return tokens;
     }
+
+    private List<Token> tokenize(final String text) {
+        return tokenizer.tokenize(text);
+    }
+
+    private List<Token> filter(final List<Token> originalTokens) {
+        List<Token> filteredTokens = new ArrayList<>(originalTokens);
+
+        for (final TokenFilter tokenFilter : tokenFilters) {
+            filteredTokens = tokenFilter.filter(filteredTokens);
+        }
+
+        return filteredTokens;
+    }
+
 }
