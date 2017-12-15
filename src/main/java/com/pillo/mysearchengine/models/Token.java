@@ -3,14 +3,15 @@ package com.pillo.mysearchengine.models;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
-public class Document {
+@ToString
+@EqualsAndHashCode(of = {"value"})
+public class Token {
 
-    private final String name;
-
-    private final String text;
+    private final String value;
 
 }
+
