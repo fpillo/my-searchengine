@@ -1,13 +1,13 @@
 package com.pillo.mysearchengine.models;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public class LowerCaseTokenFilter implements TokenFilter {
 
     @Override
-    public Set<Token> filter(final Set<Token> tokens) {
-        final Set<Token> resultTokens = new TreeSet<>();
+    public List<Token> filter(final List<Token> tokens) {
+        final List<Token> resultTokens = new LinkedList<>();
         tokens.forEach(token -> {
             resultTokens.add(applyLowerCase(token));
         });

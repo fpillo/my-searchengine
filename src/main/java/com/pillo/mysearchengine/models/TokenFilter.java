@@ -1,9 +1,9 @@
 package com.pillo.mysearchengine.models;
 
-import java.util.Set;
+import java.util.List;
 
 public interface TokenFilter {
 
-    Set<Token> filter(Set<Token> tokens);
+    List<Token> filter(List<Token> tokens);
 
 }
