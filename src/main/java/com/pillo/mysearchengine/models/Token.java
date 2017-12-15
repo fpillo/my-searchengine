@@ -6,12 +6,16 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@AllArgsConstructor
 @ToString
+@AllArgsConstructor
 @EqualsAndHashCode(of = {"value"})
-public class Token {
+public class Token implements Comparable<Token> {
 
     private final String value;
 
+    @Override
+    public int compareTo(final Token token) {
+        return value.compareTo(token.getValue());
+    }
 }
 
