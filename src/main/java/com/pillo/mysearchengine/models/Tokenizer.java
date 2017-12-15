@@ -1,9 +1,9 @@
 package com.pillo.mysearchengine.models;
 
-import java.util.Set;
+import java.util.List;
 
 public interface Tokenizer {
 
-    Set<Token> tokenize(Document document);
+    List<Token> tokenize(String text);
 
 }
