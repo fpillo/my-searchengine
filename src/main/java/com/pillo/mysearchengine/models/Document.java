@@ -3,20 +3,16 @@ package com.pillo.mysearchengine.models;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
-import javax.validation.constraints.NotBlank;
+import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-@ToString(of = {"name"})
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"uuid"})
 public class Document {
 
-    @NotBlank
-    private final String name;
+    private final UUID uuid;
 
-    @NotBlank
-    private final String text;
+    private MetaData metaData;
 
 }
