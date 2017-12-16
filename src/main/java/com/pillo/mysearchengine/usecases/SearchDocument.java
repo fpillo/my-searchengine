@@ -1,10 +1,10 @@
 package com.pillo.mysearchengine.usecases;
 
-import com.pillo.mysearchengine.exceptions.BusinessException;
 import com.pillo.mysearchengine.models.Analyzer;
 import com.pillo.mysearchengine.models.Document;
 import com.pillo.mysearchengine.models.Index;
 import com.pillo.mysearchengine.models.SearchAction;
+import com.pillo.mysearchengine.models.SearchRequest;
 import com.pillo.mysearchengine.models.Token;
 
 import java.util.List;
@@ -16,23 +16,20 @@ public class SearchDocument {
 
     private final Index index;
 
-    public SearchDocument(final Analyzer analyzer, final Index index) {
+    private final ValidateModel validateModel;
+
+    public SearchDocument(final Analyzer analyzer, final Index index, final ValidateModel validateModel) {
         this.analyzer = analyzer;
         this.index = index;
+        this.validateModel = validateModel;
     }
 
-    public Set<Document> search(final String q) {
-        validate(q);
-        final List<Token> tokens = analyzer.analyze(q);
+    public Set<Document> search(final SearchRequest searchRequest) {
+        validateModel.validate(searchRequest);
+        final List<Token> tokens = analyzer.analyze(searchRequest.getQ());
         final SearchAction searchAction = new SearchAction(tokens);
 
         return index.searchDocument(searchAction);
-    }
-
-    private void validate(final String q) {
-        if (q == null || q.trim().isEmpty()) {
-            throw new BusinessException();
-        }
     }
 
 }

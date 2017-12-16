@@ -6,12 +6,14 @@ import com.pillo.mysearchengine.models.Document;
 import com.pillo.mysearchengine.models.Index;
 import com.pillo.mysearchengine.models.LowerCaseTokenFilter;
 import com.pillo.mysearchengine.models.MovieData;
+import com.pillo.mysearchengine.models.SearchRequest;
 import com.pillo.mysearchengine.models.StandardAnalyzer;
 import com.pillo.mysearchengine.models.StandardTokenizer;
 import com.pillo.mysearchengine.models.Token;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.validation.Validation;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,8 +36,9 @@ public class SearchDocumentTest {
         final Analyzer analyzer = new StandardAnalyzer(new StandardTokenizer(), Arrays.asList(new LowerCaseTokenFilter()));
         invertedMap = new HashMap<>();
         final Index index = new Index(invertedMap);
+        final ValidateModel validateModel = new ValidateModel(Validation.buildDefaultValidatorFactory().getValidator());
 
-        searchDocument = new SearchDocument(analyzer, index);
+        searchDocument = new SearchDocument(analyzer, index, validateModel);
     }
 
     @Test
@@ -51,7 +54,7 @@ public class SearchDocumentTest {
         invertedMap.put(new Token("alien"), new HashSet<>(Arrays.asList(document2)));
         invertedMap.put(new Token("apocalypse"), new HashSet<>(Arrays.asList(document2)));
 
-        final Set<Document> result = searchDocument.search("alien");
+        final Set<Document> result = searchDocument.search(new SearchRequest("alien"));
         assertEquals(1, result.size());
         assertFalse(result.contains(document1));
         assertTrue(result.contains(document2));
@@ -70,7 +73,7 @@ public class SearchDocumentTest {
         invertedMap.put(new Token("alien"), new HashSet<>(Arrays.asList(document2)));
         invertedMap.put(new Token("apocalypse"), new HashSet<>(Arrays.asList(document2)));
 
-        final Set<Document> result = searchDocument.search(" ALIEN Jan-Michael ");
+        final Set<Document> result = searchDocument.search(new SearchRequest(" ALIEN Jan-Michael "));
         assertEquals(2, result.size());
         assertTrue(result.contains(document1));
         assertTrue(result.contains(document2));
@@ -89,7 +92,7 @@ public class SearchDocumentTest {
         invertedMap.put(new Token("alien"), new HashSet<>(Arrays.asList(document2)));
         invertedMap.put(new Token("apocalypse"), new HashSet<>(Arrays.asList(document2)));
 
-        final Set<Document> result = searchDocument.search("    aPoCALYpse test @token");
+        final Set<Document> result = searchDocument.search(new SearchRequest("    aPoCALYpse test @token"));
         assertEquals(1, result.size());
         assertFalse(result.contains(document1));
         assertTrue(result.contains(document2));
@@ -108,7 +111,7 @@ public class SearchDocumentTest {
         invertedMap.put(new Token("alien"), new HashSet<>(Arrays.asList(document2)));
         invertedMap.put(new Token("apocalypse"), new HashSet<>(Arrays.asList(document2)));
 
-        final Set<Document> result = searchDocument.search("aliens apocalypS @token");
+        final Set<Document> result = searchDocument.search(new SearchRequest("aliens apocalypS @token"));
         assertEquals(0, result.size());
         assertFalse(result.contains(document1));
         assertFalse(result.contains(document2));
@@ -116,12 +119,12 @@ public class SearchDocumentTest {
 
     @Test(expected = BusinessException.class)
     public void test_search_empty_token_should_throws_business_exception() throws Exception {
-        searchDocument.search(" ");
+        searchDocument.search(new SearchRequest(" "));
     }
 
     @Test(expected = BusinessException.class)
     public void test_search_null_token_should_throws_business_exception() throws Exception {
-        searchDocument.search(null);
+        searchDocument.search(new SearchRequest(null));
     }
 
 }
