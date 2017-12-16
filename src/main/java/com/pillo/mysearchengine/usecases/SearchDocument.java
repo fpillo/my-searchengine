@@ -5,10 +5,14 @@ import com.pillo.mysearchengine.models.Document;
 import com.pillo.mysearchengine.models.Index;
 import com.pillo.mysearchengine.models.SearchAction;
 import com.pillo.mysearchengine.models.SearchRequest;
+import com.pillo.mysearchengine.models.SearchResponse;
 import com.pillo.mysearchengine.models.Token;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SearchDocument {
 
@@ -24,12 +28,19 @@ public class SearchDocument {
         this.validateModel = validateModel;
     }
 
-    public Set<Document> search(final SearchRequest searchRequest) {
+    public SearchResponse search(final SearchRequest searchRequest) {
         validateModel.validate(searchRequest);
         final List<Token> tokens = analyzer.analyze(searchRequest.getQ());
-        final SearchAction searchAction = new SearchAction(tokens);
 
-        return index.searchDocument(searchAction);
+        final Instant start = Instant.now();
+        final SearchAction searchAction = new SearchAction(tokens);
+        final Duration totalTime = Duration.between(start, Instant.now());
+
+        return createResponse(totalTime.toMillis(), index.searchDocument(searchAction));
+    }
+
+    private SearchResponse createResponse(final Long totalTime, final Set<Document> documents) {
+        return new SearchResponse(totalTime, documents.stream().collect(Collectors.toList()));
     }
 
 }

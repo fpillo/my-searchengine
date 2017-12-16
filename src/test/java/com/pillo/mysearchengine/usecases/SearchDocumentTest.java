@@ -7,6 +7,7 @@ import com.pillo.mysearchengine.models.Index;
 import com.pillo.mysearchengine.models.LowerCaseTokenFilter;
 import com.pillo.mysearchengine.models.MovieData;
 import com.pillo.mysearchengine.models.SearchRequest;
+import com.pillo.mysearchengine.models.SearchResponse;
 import com.pillo.mysearchengine.models.StandardAnalyzer;
 import com.pillo.mysearchengine.models.StandardTokenizer;
 import com.pillo.mysearchengine.models.Token;
@@ -17,6 +18,7 @@ import javax.validation.Validation;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -54,7 +56,9 @@ public class SearchDocumentTest {
         invertedMap.put(new Token("alien"), new HashSet<>(Arrays.asList(document2)));
         invertedMap.put(new Token("apocalypse"), new HashSet<>(Arrays.asList(document2)));
 
-        final Set<Document> result = searchDocument.search(new SearchRequest("alien"));
+        final SearchResponse response = searchDocument.search(new SearchRequest("alien"));
+        final List<Document> result = response.getDocuments();
+
         assertEquals(1, result.size());
         assertFalse(result.contains(document1));
         assertTrue(result.contains(document2));
@@ -73,7 +77,9 @@ public class SearchDocumentTest {
         invertedMap.put(new Token("alien"), new HashSet<>(Arrays.asList(document2)));
         invertedMap.put(new Token("apocalypse"), new HashSet<>(Arrays.asList(document2)));
 
-        final Set<Document> result = searchDocument.search(new SearchRequest(" ALIEN Jan-Michael "));
+        final SearchResponse response = searchDocument.search(new SearchRequest(" ALIEN Jan-Michael "));
+        final List<Document> result = response.getDocuments();
+
         assertEquals(2, result.size());
         assertTrue(result.contains(document1));
         assertTrue(result.contains(document2));
@@ -92,7 +98,9 @@ public class SearchDocumentTest {
         invertedMap.put(new Token("alien"), new HashSet<>(Arrays.asList(document2)));
         invertedMap.put(new Token("apocalypse"), new HashSet<>(Arrays.asList(document2)));
 
-        final Set<Document> result = searchDocument.search(new SearchRequest("    aPoCALYpse test @token"));
+        final SearchResponse response = searchDocument.search(new SearchRequest("    aPoCALYpse test @token"));
+        final List<Document> result = response.getDocuments();
+
         assertEquals(1, result.size());
         assertFalse(result.contains(document1));
         assertTrue(result.contains(document2));
@@ -111,7 +119,9 @@ public class SearchDocumentTest {
         invertedMap.put(new Token("alien"), new HashSet<>(Arrays.asList(document2)));
         invertedMap.put(new Token("apocalypse"), new HashSet<>(Arrays.asList(document2)));
 
-        final Set<Document> result = searchDocument.search(new SearchRequest("aliens apocalypS @token"));
+        final SearchResponse response = searchDocument.search(new SearchRequest("aliens apocalypS @token"));
+        final List<Document> result = response.getDocuments();
+
         assertEquals(0, result.size());
         assertFalse(result.contains(document1));
         assertFalse(result.contains(document2));
