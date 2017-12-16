@@ -3,7 +3,6 @@ package com.pillo.mysearchengine.models;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class Index {
 
@@ -20,7 +19,7 @@ public class Index {
     }
 
     public Set<Document> searchDocument(final SearchAction searchAction) {
-        final Set<Document> result = new TreeSet<>();
+        final Set<Document> result = new HashSet<>();
         searchAction.getTokens().forEach(token -> {
             final Set<Document> documents = invertedMap.get(token);
             if (documents != null) {
