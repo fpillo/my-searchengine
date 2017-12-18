@@ -10,6 +10,7 @@ import com.pillo.mysearchengine.models.Token;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class SearchDocument {
         final List<Token> tokens = analyzer.analyze(searchRequest.getQ());
 
         final Instant start = Instant.now();
-        final SearchAction searchAction = new SearchAction(tokens, searchRequest.getOperator());
+        final SearchAction searchAction = new SearchAction(new HashSet<>(tokens), searchRequest.getOperator());
         final Duration totalTime = Duration.between(start, Instant.now());
 
         return createResponse(totalTime.toMillis(), index.searchDocument(searchAction));
