@@ -33,7 +33,7 @@ public class SearchDocument {
         final List<Token> tokens = analyzer.analyze(searchRequest.getQ());
 
         final Instant start = Instant.now();
-        final SearchAction searchAction = new SearchAction(tokens);
+        final SearchAction searchAction = new SearchAction(tokens, searchRequest.getOperator());
         final Duration totalTime = Duration.between(start, Instant.now());
 
         return createResponse(totalTime.toMillis(), index.searchDocument(searchAction));

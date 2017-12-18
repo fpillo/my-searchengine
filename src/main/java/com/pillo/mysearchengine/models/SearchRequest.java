@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
@@ -13,5 +14,8 @@ public class SearchRequest {
 
     @NotBlank
     private final String q;
+
+    @NotNull
+    private final SearchOperator operator;
 
 }

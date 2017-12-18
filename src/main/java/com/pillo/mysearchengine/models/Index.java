@@ -19,16 +19,14 @@ public class Index {
     }
 
     public Set<Document> searchDocument(final SearchAction searchAction) {
-        final Set<Document> result = new HashSet<>();
-        searchAction.getTokens().forEach(token -> {
-            final Set<Document> documents = invertedMap.get(token);
-            if (documents != null) {
-                result.addAll(documents);
-            }
+        final DocumentGrouper documentGrouper = DocumentGrouperFactory.getGrouper(searchAction.getOperator());
 
-        });
+        for (final Token token : searchAction.getTokens()) {
+            final Set<Document> documents = invertedMap.getOrDefault(token, new HashSet<>());
+            documentGrouper.group(documents);
+        }
 
-        return result;
+        return documentGrouper.getGrouped();
     }
 
     private void index(final Token token, final Document document) {
