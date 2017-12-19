@@ -19,7 +19,7 @@ public class Index {
     }
 
     public Set<Document> searchDocument(final SearchAction searchAction) {
-        final SearchEngine searchEngine = SearchengineFactory.getEngine(searchAction.getOperator(), invertedMap);
+        final SearchEngine searchEngine = SearchEngineFactory.getEngine(searchAction.getOperator(), invertedMap);
         return searchEngine.searchByTokens(searchAction.getTokens());
     }
 
