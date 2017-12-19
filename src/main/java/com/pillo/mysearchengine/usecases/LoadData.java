@@ -40,23 +40,24 @@ public class LoadData {
     public void load() {
         final Resource[] resources = loadResources();
 
-        for (final Resource resource : resources) {
+            for (final Resource resource : resources) {
             try {
                 final File file = resource.getFile();
                 final MetaData metaData = convertToMetaData(file);
                 indexDocument.index(metaData);
             } catch (final IOException e) {
-                throw new ConvertMetaDataException();
+                throw new ConvertMetaDataException("Error while loading file.", e);
             }
         }
 
     }
 
     private Resource[] loadResources() {
+        final String file = String.format(FILE_PATTERN, filePath);
         try {
-            return ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(String.format(FILE_PATTERN, filePath));
+            return ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(file);
         } catch (final IOException e) {
-            throw new LoadResourceFileException();
+            throw new LoadResourceFileException("Error while loading resource: " + file, e);
         }
     }
 
