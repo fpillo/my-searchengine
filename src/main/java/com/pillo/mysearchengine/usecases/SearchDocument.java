@@ -7,6 +7,8 @@ import com.pillo.mysearchengine.models.SearchAction;
 import com.pillo.mysearchengine.models.SearchRequest;
 import com.pillo.mysearchengine.models.SearchResponse;
 import com.pillo.mysearchengine.models.Token;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
 public class SearchDocument {
 
     private final Analyzer analyzer;
@@ -23,6 +26,7 @@ public class SearchDocument {
 
     private final ValidateModel validateModel;
 
+    @Autowired
     public SearchDocument(final Analyzer analyzer, final Index index, final ValidateModel validateModel) {
         this.analyzer = analyzer;
         this.index = index;

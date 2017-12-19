@@ -6,11 +6,14 @@ import com.pillo.mysearchengine.models.Index;
 import com.pillo.mysearchengine.models.IndexAction;
 import com.pillo.mysearchengine.models.MetaData;
 import com.pillo.mysearchengine.models.Token;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class IndexDocument {
 
     private final Analyzer analyzer;
@@ -19,6 +22,7 @@ public class IndexDocument {
 
     private final ValidateModel validateModel;
 
+    @Autowired
     public IndexDocument(final Analyzer analyzer, final Index index, final ValidateModel validateModel) {
         this.analyzer = analyzer;
         this.index = index;
