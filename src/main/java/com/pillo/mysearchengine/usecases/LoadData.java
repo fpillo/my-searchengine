@@ -1,7 +1,10 @@
 package com.pillo.mysearchengine.usecases;
 
+import com.pillo.mysearchengine.exceptions.ConvertMetaDataException;
+import com.pillo.mysearchengine.exceptions.LoadResourceFileException;
 import com.pillo.mysearchengine.models.MetaData;
 import com.pillo.mysearchengine.models.MovieData;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -11,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
+@Slf4j
 @Service
 public class LoadData {
 
@@ -32,18 +37,30 @@ public class LoadData {
     }
 
     @PostConstruct
-    public void load() throws Exception {
-        final Resource[] resources = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(String.format(FILE_PATTERN, filePath));
+    public void load() {
+        final Resource[] resources = loadResources();
 
         for (final Resource resource : resources) {
-            final File file = resource.getFile();
-            final MetaData metaData = convertToMetaData(file);
-            indexDocument.index(metaData);
+            try {
+                final File file = resource.getFile();
+                final MetaData metaData = convertToMetaData(file);
+                indexDocument.index(metaData);
+            } catch (final IOException e) {
+                throw new ConvertMetaDataException();
+            }
         }
 
     }
 
-    private MetaData convertToMetaData(final File file) throws Exception {
+    private Resource[] loadResources() {
+        try {
+            return ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(String.format(FILE_PATTERN, filePath));
+        } catch (final IOException e) {
+            throw new LoadResourceFileException();
+        }
+    }
+
+    private MetaData convertToMetaData(final File file) throws IOException {
         final String fileName = file.getName();
         final StringBuffer stringBuffer = new StringBuffer();
         final Scanner scanner = new Scanner(file);
