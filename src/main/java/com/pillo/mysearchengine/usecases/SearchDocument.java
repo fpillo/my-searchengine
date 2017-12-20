@@ -39,9 +39,11 @@ public class SearchDocument {
 
         final Instant start = Instant.now();
         final SearchAction searchAction = new SearchAction(new HashSet<>(tokens), searchRequest.getOperator());
+        final Set<Document> documents = index.searchDocument(searchAction);
+
         final Duration totalTime = Duration.between(start, Instant.now());
 
-        return createResponse(totalTime.toMillis(), index.searchDocument(searchAction));
+        return createResponse(totalTime.toMillis(), documents);
     }
 
     private SearchResponse createResponse(final Long totalTime, final Set<Document> documents) {

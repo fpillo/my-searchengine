@@ -15,16 +15,22 @@ public class IntersectionEngine implements SearchEngine {
     @Override
     public Set<Document> searchByTokens(final Set<Token> tokens) {
         Set<Document> result = new HashSet<>();
+        boolean firstRun = true;
+
         for (final Token token : tokens) {
             final Set<Document> documents = invertedMap.getOrDefault(token, new HashSet<>());
             if (documents.isEmpty()) {
                 return new HashSet<>();
             }
 
-            if (result.isEmpty()) {
+            if (firstRun) {
                 result.addAll(documents);
+                firstRun = false;
             } else {
                 result.retainAll(documents);
+                if (result.isEmpty()) {
+                    return result;
+                }
             }
 
         }
