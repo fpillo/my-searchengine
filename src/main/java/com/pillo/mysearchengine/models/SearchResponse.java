@@ -1,20 +1,22 @@
 package com.pillo.mysearchengine.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
-@ToString
 public class SearchResponse {
 
     private final Long took;
 
-    private final List<Document> documents;
+    private final List<Document> documents = new ArrayList<>();
+
+    public SearchResponse(final Long took, final List<Document> documents) {
+        this.took = took;
+        this.documents.addAll(documents);
+    }
 
     public Integer size() {
         if (CollectionUtils.isEmpty(documents)) {
@@ -22,6 +24,16 @@ public class SearchResponse {
         }
 
         return documents.size();
+    }
+
+    public String toString() {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        documents.forEach(document -> {
+            stringBuilder.append(document.getMetaData().getName()).append("\n");
+        });
+
+        return stringBuilder.toString();
     }
 
 }

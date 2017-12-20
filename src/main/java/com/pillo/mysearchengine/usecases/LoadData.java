@@ -54,6 +54,7 @@ public class LoadData {
 
     private Resource[] loadResources() {
         final String file = String.format(FILE_PATTERN, filePath);
+        log.info("Starting loading file from path: {}", file);
         try {
             return ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(file);
         } catch (final IOException e) {
