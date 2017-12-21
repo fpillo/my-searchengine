@@ -7,6 +7,7 @@ Requerimentos:
 
 Como fazer o build:
 1) Editar a variável "filePath" que será usada para encontrar os arquivos a serem lidos pela aplicação.
+ex: "/home/user/Documents/data/"
 2) mvn clean install
 
 Como rodar:
