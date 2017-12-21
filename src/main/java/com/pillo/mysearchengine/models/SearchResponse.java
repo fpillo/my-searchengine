@@ -26,6 +26,7 @@ public class SearchResponse {
         return documents.size();
     }
 
+    @Override
     public String toString() {
         final StringBuilder stringBuilder = new StringBuilder();
 

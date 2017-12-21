@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class QueryLoad {
 
+    private static final String RESULT_MESSAGE = "\nForam encontradas %o ocorrências pelo termo \"%s\".\nOs arquivos que possuem \"%s\" são:\n%s";
+
     private final SearchDocument searchDocument;
 
     private final ApplicationArguments args;
@@ -30,7 +32,11 @@ public class QueryLoad {
         final SearchRequest searchRequest = new SearchRequest(q, SearchOperator.AND);
         final SearchResponse searchResponse = searchDocument.search(searchRequest);
 
-        System.out.println(searchResponse.toString());
+        printResultMessage(searchResponse, q);
+    }
+
+    private void printResultMessage(final SearchResponse searchResponse, final String q) {
+        log.info(String.format(RESULT_MESSAGE, searchResponse.size(), q, q, searchResponse.toString()));
     }
 
 }
