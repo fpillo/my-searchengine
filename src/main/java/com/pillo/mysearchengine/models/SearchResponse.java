@@ -16,6 +16,7 @@ public class SearchResponse {
     public SearchResponse(final Long took, final List<Document> documents) {
         this.took = took;
         this.documents.addAll(documents);
+        sort();
     }
 
     public Integer size() {
@@ -35,6 +36,10 @@ public class SearchResponse {
         });
 
         return stringBuilder.toString();
+    }
+
+    private void sort() {
+        documents.sort((Document d1, Document d2)-> d1.getMetaData().getName().compareTo(d2.getMetaData().getName()));
     }
 
 }
